@@ -1,0 +1,23 @@
+variables:
+  DOCKER_DRIVER: overlay2
+
+image: gitlab/dind
+
+before_script:
+  - docker info
+
+stages:
+  - test
+
+unit_tests:
+  stage: test
+  services:
+    - docker:dind
+  script:
+    - docker info
+    - docker build . --tag sdo-omniauth-ping-one
+    - docker run --rm --name="sdo-omniauth-ping-one-cont" sdo-omniauth-ping-one
+  tags:
+    - sdo-docker-runner
+  only:
+    - master
