@@ -1,4 +1,4 @@
-# omniauth-ping
+# omniauth-ping-one
 
 # Install/Set up dev env
 

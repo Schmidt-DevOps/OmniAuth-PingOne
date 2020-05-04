@@ -1,5 +1,5 @@
 module OmniAuth
-  module Ping
+  module PingOne
     VERSION = '0.0.1'
   end
 end

@@ -3,7 +3,7 @@ require 'omniauth-oauth2'
 # https://sso.connect.pingidentity.com/a57ad48e-710d-40e1-aac5-c620a4e63a54/.well-known/openid-configuration
 module OmniAuth
     module Strategies
-        class Ping < OmniAuth::Strategies::OAuth2
+        class PingOne < OmniAuth::Strategies::OAuth2
             # attr_reader :score
             #
             # def initialize
@@ -57,3 +57,5 @@ module OmniAuth
         end
     end
 end
+
+OmniAuth.config.add_camelization 'ping-one', 'PingOne'
