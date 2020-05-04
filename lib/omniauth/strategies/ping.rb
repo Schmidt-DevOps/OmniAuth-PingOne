@@ -4,16 +4,16 @@ require 'omniauth-oauth2'
 module OmniAuth
     module Strategies
         class Ping < OmniAuth::Strategies::OAuth2
-            attr_reader :score
-
-            def initialize
-                super
-                @score = 1
-            end
-
-            def hit
-                @score += 1
-            end
+            # attr_reader :score
+            #
+            # def initialize
+            #     super
+            #     @score = 1
+            # end
+            #
+            # def hit
+            #     @score += 1
+            # end
 
             option :client_options, {
                 :site => 'https://not-set.invalid',
