@@ -1,9 +1,91 @@
-require 'omniauth-oauth2'
+require "oauth2"
+require "omniauth"
+require "securerandom"
+require "socket" # for SocketError
+require "timeout" # for Timeout::Error
 
 # https://sso.connect.pingidentity.com/a57ad48e-710d-40e1-aac5-c620a4e63a54/.well-known/openid-configuration
 module OmniAuth
     module Strategies
-        class PingOne < OmniAuth::Strategies::OAuth2
+        class PingOne
+            include OmniAuth::Strategy
+
+            def self.inherited(subclass)
+                Rails.logger.debug "XXX-379 raw_info_C 1 "
+                OmniAuth::Strategy.included(subclass)
+            end
+
+            args %i[client_id client_secret]
+
+            option :client_id, nil
+            option :client_secret, nil
+            option :client_options, {}
+            option :authorize_params, {}
+            option :authorize_options, [:scope, :state]
+            option :token_params, {}
+            option :token_options, []
+            option :auth_token_params, {}
+            option :provider_ignores_state, false
+
+            attr_accessor :access_token
+
+            def client
+                Rails.logger.debug "XXX-379 raw_info_C 2 #{options.client_id} #{options.client_secret} #{options.client_options.to_json} "
+                ::OAuth2::Client.new(options.client_id, options.client_secret, deep_symbolize(options.client_options))
+            end
+
+            credentials do
+                hash = { "token" => access_token.token }
+                hash["refresh_token"] = access_token.refresh_token if access_token.expires? && access_token.refresh_token
+                hash["expires_at"] = access_token.expires_at if access_token.expires?
+                hash["expires"] = access_token.expires?
+                Rails.logger.debug "XXX-379 raw_info_C 3 #{hash.to_json} "
+                hash
+            end
+
+            def request_phase
+                Rails.logger.debug "XXX-379 raw_info_C 4 #{callback_url} #{authorize_params.to_json}"
+                redirect client.auth_code.authorize_url({ :redirect_uri => callback_url }.merge(authorize_params))
+            end
+
+            def authorize_params_orig
+                options.authorize_params[:state] = SecureRandom.hex(24)
+                params = options.authorize_params.merge(options_for("authorize"))
+                Rails.logger.debug "XXX-379 raw_info_C 5 #{params.to_json} "
+                if OmniAuth.config.test_mode
+                    @env ||= {}
+                    @env["rack.session"] ||= {}
+                end
+                session["omniauth.state"] = params[:state]
+                params
+            end
+
+            def token_params
+                Rails.logger.debug "XXX-379 raw_info_C 6 "
+                options.token_params.merge(options_for("token"))
+            end
+
+            def callback_phase # rubocop:disable AbcSize, CyclomaticComplexity, MethodLength, PerceivedComplexity
+                Rails.logger.debug "XXX-379 raw_info_C 7 #{request.params.to_json}"
+                error = request.params["error_reason"] || request.params["error"]
+                if error
+                    fail!(error, CallbackError.new(request.params["error"], request.params["error_description"] || request.params["error_reason"], request.params["error_uri"]))
+                elsif !options.provider_ignores_state && (request.params["state"].to_s.empty? || request.params["state"] != session.delete("omniauth.state"))
+                    fail!(:csrf_detected, CallbackError.new(:csrf_detected, "CSRF detected"))
+                else
+                    self.access_token = build_access_token
+                    self.access_token = access_token.refresh! if access_token.expired?
+                    super
+                end
+            rescue ::OAuth2::Error, CallbackError => e
+                fail!(:invalid_credentials, e)
+            rescue ::Timeout::Error, ::Errno::ETIMEDOUT => e
+                fail!(:timeout, e)
+            rescue ::SocketError => e
+                fail!(:failed_to_connect, e)
+            end
+
+
             # attr_reader :score
             #
             # def initialize
@@ -27,7 +109,8 @@ module OmniAuth
             end
 
             def authorize_params
-                super.tap do |params|
+                Rails.logger.debug "XXX-379 raw_info_C 8"
+                authorize_params_orig.tap do |params|
                     params[:scope] = options[:scopes].join(' ')
                 end
             end
@@ -35,7 +118,7 @@ module OmniAuth
             uid { raw_info['sub'] }
 
             def email
-                Rails.logger.debug "XXX-379 raw_info1:" + @raw_info.to_s
+                Rails.logger.debug "XXX-379 raw_info1:" + raw_info.to_json
                 raw_info['email']
             end
 
@@ -59,8 +142,58 @@ module OmniAuth
 
                 @raw_info
             end
+
+
+            protected
+
+            def build_access_token
+                Rails.logger.debug "XXX-379 raw_info_C 8 #{request.params.to_json}"
+                verifier = request.params["code"]
+                client.auth_code.get_token(verifier, { :redirect_uri => callback_url }.merge(token_params.to_hash(:symbolize_keys => true)), deep_symbolize(options.auth_token_params))
+            end
+
+            def deep_symbolize(options)
+                Rails.logger.debug "XXX-379 raw_info_C 9 #{options.to_json}"
+                hash = {}
+                options.each do |key, value|
+                    hash[key.to_sym] = value.is_a?(Hash) ? deep_symbolize(value) : value
+                end
+                hash
+            end
+
+            def options_for(option)
+                Rails.logger.debug "XXX-379 raw_info_C 10 #{option.to_json}"
+                hash = {}
+                options.send(:"#{option}_options").select { |key| options[key] }.each do |key|
+                    hash[key.to_sym] = if options[key].respond_to?(:call)
+                                           options[key].call(env)
+                                       else
+                                           options[key]
+                                       end
+                end
+                hash
+            end
+
+            # An error that is indicated in the OAuth 2.0 callback.
+            # This could be a `redirect_uri_mismatch` or other
+            class CallbackError < StandardError
+                attr_accessor :error, :error_reason, :error_uri
+
+                def initialize(error, error_reason = nil, error_uri = nil)
+                    Rails.logger.debug "XXX-379 raw_info_C 11 #{error} #{error_reason} #{error_uri}"
+
+                    self.error = error
+                    self.error_reason = error_reason
+                    self.error_uri = error_uri
+                end
+
+                def message
+                    [error, error_reason, error_uri].compact.join(" | ")
+                end
+            end
         end
     end
 end
 
 OmniAuth.config.add_camelization 'ping-one', 'PingOne'
+OmniAuth.config.add_camelization "oauth2", "OAuth2"
