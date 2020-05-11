@@ -29,7 +29,6 @@ module OmniAuth
             def authorize_params
                 super.tap do |params|
                     params[:scope] = options[:scopes].join(' ')
-                    Rails.logger.debug "XXX-379 raw_info3:" + params.to_s
                 end
             end
 
@@ -48,6 +47,7 @@ module OmniAuth
             end
 
             def raw_info
+                Rails.logger.debug "XXX-379 raw_infoB2 #{self.access_token.token}"
                 access_token.options[:mode] = :header
                 access_token_response = access_token.get(options[:client_options][:user_url])
                 Rails.logger.debug "XXX-379 raw_info4a:" + access_token_response.body.to_s
