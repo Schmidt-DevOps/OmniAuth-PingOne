@@ -29,12 +29,14 @@ module OmniAuth
             def authorize_params
                 super.tap do |params|
                     params[:scope] = options[:scopes].join(' ')
+                    Rails.logger.debug "XXX-379 raw_info3:" + @raw_info.to_s
                 end
             end
 
             uid { raw_info['sub'] }
 
             def email
+                Rails.logger.debug "XXX-379 raw_info1:" + @raw_info.to_s
                 raw_info['email']
             end
 
@@ -50,7 +52,7 @@ module OmniAuth
                 @raw_info ||= access_token.get(options[:client_options][:user_url]).parsed
 
                 # This is required for debugging. Remove later. XXX-379
-                Rails.logger.debug "XXX-379 raw_info:" + @raw_info.to_s
+                Rails.logger.debug "XXX-379 raw_info2:" + @raw_info.to_s
 
                 @raw_info
             end
