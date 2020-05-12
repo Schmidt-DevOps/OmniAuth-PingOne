@@ -158,7 +158,7 @@ module OmniAuth
                 Rails.logger.debug "XXX-379 raw_info_C 8 #{request.params.to_json}"
                 verifier = request.params["code"]
                 a = {  }.merge(token_params.to_hash(:symbolize_keys => true))
-                b = deep_symbolize(options.auth_token_params)
+                b = { :redirect_uri => callback_url }.merge(deep_symbolize(options.auth_token_params))
                 Rails.logger.debug "XXX-379 auth_params10-A #{a.to_json}"
                 Rails.logger.debug "XXX-379 auth_params10-B #{b.to_json}"
                 client.auth_code.get_token(verifier, a, b)
