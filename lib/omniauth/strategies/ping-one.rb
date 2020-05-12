@@ -37,10 +37,6 @@ module OmniAuth
             def raw_info
                 access_token.options[:mode] = :header
                 @raw_info ||= access_token.get(options[:client_options][:user_url]).parsed
-
-                # This is required for debugging. Remove later. XXX-379
-                Rails.logger.debug "XXX-379 raw_info:" + @raw_info.to_s
-
                 @raw_info
             end
 
