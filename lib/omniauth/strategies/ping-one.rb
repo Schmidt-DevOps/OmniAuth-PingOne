@@ -45,7 +45,9 @@ module OmniAuth
 
             def request_phase
                 Rails.logger.debug "XXX-379 raw_info_C 4 #{callback_url} #{authorize_params.to_json}"
-                redirect client.auth_code.authorize_url({ :redirect_uri => callback_url }.merge(authorize_params))
+                auth_params = { :redirect_uri => callback_url }.merge(authorize_params)
+                Rails.logger.debug "XXX-379 auth_params #{auth_params.to_json}"
+                redirect client.auth_code.authorize_url(auth_params)
             end
 
             def authorize_params_orig
@@ -155,7 +157,11 @@ module OmniAuth
             def build_access_token
                 Rails.logger.debug "XXX-379 raw_info_C 8 #{request.params.to_json}"
                 verifier = request.params["code"]
-                client.auth_code.get_token(verifier, { :redirect_uri => callback_url }.merge(token_params.to_hash(:symbolize_keys => true)), deep_symbolize(options.auth_token_params))
+                a = {  }.merge(token_params.to_hash(:symbolize_keys => true))
+                b = deep_symbolize(options.auth_token_params)
+                Rails.logger.debug "XXX-379 auth_params10-A #{a.to_json}"
+                Rails.logger.debug "XXX-379 auth_params10-B #{b.to_json}"
+                client.auth_code.get_token(verifier, a, b)
             end
 
             def deep_symbolize(options)
