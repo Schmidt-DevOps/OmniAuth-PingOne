@@ -69,19 +69,25 @@ module OmniAuth
                 Rails.logger.debug "XXX-379 raw_info_C 7 #{request.params.to_json}"
                 error = request.params["error_reason"] || request.params["error"]
                 if error
+                    Rails.logger.debug "XXX-379 raw_info_D 4 #{request.params.to_json}"
                     fail!(error, CallbackError.new(request.params["error"], request.params["error_description"] || request.params["error_reason"], request.params["error_uri"]))
                 elsif !options.provider_ignores_state && (request.params["state"].to_s.empty? || request.params["state"] != session.delete("omniauth.state"))
+                    Rails.logger.debug "XXX-379 raw_info_D 5 CSRF"
                     fail!(:csrf_detected, CallbackError.new(:csrf_detected, "CSRF detected"))
                 else
+                    Rails.logger.debug "XXX-379 raw_info_D 6"
                     self.access_token = build_access_token
                     self.access_token = access_token.refresh! if access_token.expired?
                     super
                 end
             rescue ::OAuth2::Error, CallbackError => e
+                Rails.logger.debug "XXX-379 raw_info_D 3 #{e.to_json}"
                 fail!(:invalid_credentials, e)
             rescue ::Timeout::Error, ::Errno::ETIMEDOUT => e
+                Rails.logger.debug "XXX-379 raw_info_D 2 #{e.to_json}"
                 fail!(:timeout, e)
             rescue ::SocketError => e
+                Rails.logger.debug "XXX-379 raw_info_D 1 #{e.to_json}"
                 fail!(:failed_to_connect, e)
             end
 
