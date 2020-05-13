@@ -42,8 +42,8 @@ module OmniAuth
 
             protected
 
-            # Wrap 'redirect_uri' in auth_token_params rather than token_params. Some Ping ID instances would
-            # otherwise reject the request.
+            # Wrap 'redirect_uri' in auth_token_params rather than token_params. Some Ping ID instances
+            # may otherwise reject the request.
             def build_access_token
                 verifier = request.params["code"]
                 client.auth_code.get_token(verifier, token_params.to_hash(:symbolize_keys => true), { :redirect_uri => callback_url }.merge(deep_symbolize(options.auth_token_params)))
