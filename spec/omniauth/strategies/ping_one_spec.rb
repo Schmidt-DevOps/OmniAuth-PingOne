@@ -1,8 +1,21 @@
 require 'omniauth/strategies/ping-one'
-RSpec.describe OmniAuth::Strategies::PingOne, "#email" do
-    context "just a token test" do
-        it "just a token test" do
-            expect(true).to be true
+describe OmniAuth::Strategies::PingOne do
+    let(:ping_one_service) { OmniAuth::Strategies::PingOne.new("X", "Y", "Z", { :client_options => {
+        site: "https://site.example.com",
+        redirect_uri: "https://you.example.com/auth/ping_one/callback",
+        authorize_url: '/xxx/as/authorization.oauth2',
+        token_url: '/xxx/as/token.oauth2',
+        user_url: '/xxx/idp/userinfo.openid',
+    }, :scopes => %w[profile email openid] }) }
+    subject { ping_one_service }
+
+    context 'configured service with given params' do
+        it "given params" do
+            expect(subject.options.client_options.site).to eq "https://site.example.com"
+            expect(subject.options.client_options.redirect_uri).to eq "https://you.example.com/auth/ping_one/callback"
+            expect(subject.options.client_options.authorize_url).to eq '/xxx/as/authorization.oauth2'
+            expect(subject.options.client_options.token_url).to eq '/xxx/as/token.oauth2'
+            expect(subject.options.client_options.user_url).to eq '/xxx/idp/userinfo.openid'
         end
     end
 end
