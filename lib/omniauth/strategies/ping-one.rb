@@ -35,6 +35,7 @@ module OmniAuth
             end
 
             def raw_info
+                Rails.logger.debug "KRP365TEMP " + options.to_json
                 access_token.options[:mode] = :header
                 @raw_info ||= access_token.get(options[:client_options][:user_url]).parsed
                 @raw_info
