@@ -48,7 +48,13 @@ module OmniAuth
             # may otherwise reject the request.
             def build_access_token
                 verifier = request.params["code"]
-                client.auth_code.get_token(verifier, token_params.to_hash(:symbolize_keys => true), { :redirect_uri => callback_url }.merge(deep_symbolize(options.auth_token_params)))
+                tp_hash = token_params.to_hash(:symbolize_keys => true)
+                p = { :redirect_uri => callback_url }.merge(deep_symbolize(options.auth_token_params))
+                Rails.logger.debug "KRP365TEMP verifier " + verifier.to_json
+                Rails.logger.debug "KRP365TEMP tp_hash " + tp_hash.to_json
+                Rails.logger.debug "KRP365TEMP p " + p.to_json
+                Rails.logger.debug "KRP365TEMP auth_code " + @auth_code.to_json
+                client.auth_code.get_token(verifier, tp_hash, p)
             end
         end
     end
