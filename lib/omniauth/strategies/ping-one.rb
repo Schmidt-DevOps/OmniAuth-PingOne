@@ -54,7 +54,9 @@ module OmniAuth
                 Rails.logger.debug "KRP365TEMP tp_hash " + tp_hash.to_json
                 Rails.logger.debug "KRP365TEMP p " + p.to_json
                 Rails.logger.debug "KRP365TEMP auth_code " + @auth_code.to_json
-                client.auth_code.get_token(verifier, tp_hash, p)
+                response = client.auth_code.get_token(verifier, tp_hash, p)
+                Rails.logger.debug "KRP365TEMP response " + response.to_json
+                response
             end
         end
     end
