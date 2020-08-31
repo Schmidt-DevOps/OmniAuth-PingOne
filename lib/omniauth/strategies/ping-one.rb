@@ -24,7 +24,7 @@ module OmniAuth
             uid { raw_info['sub'] }
 
             def email
-                raw_info['email'] || raw_info['mail']
+                raw_info['email'] || raw_info['mail'] || raw_info['E-Mail']
             end
 
             info do
