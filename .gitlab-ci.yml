@@ -1,7 +1,3 @@
-variables:
-  DOCKER_DRIVER: overlay2
-
-image: gitlab/dind
 
 before_script:
   - docker info
@@ -12,7 +8,7 @@ stages:
 unit_tests:
   stage: test
   services:
-    - docker:dind
+    - docker:19-dind
   script:
     - docker info
     - docker build . --tag sdo-omniauth-ping-one
