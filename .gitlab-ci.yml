@@ -14,6 +14,6 @@ unit_tests:
     - docker build . --tag sdo-omniauth-ping-one
     - docker run --rm --name="sdo-omniauth-ping-one-cont" sdo-omniauth-ping-one
   tags:
-    - sdo-docker-runner
+    - sdo-default-runner
   only:
     - master
