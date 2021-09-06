@@ -1,12 +1,21 @@
 require 'omniauth/strategies/ping-one'
 describe OmniAuth::Strategies::PingOne do
-    let(:ping_one_service) { OmniAuth::Strategies::PingOne.new("X", "Y", "Z", { :pkce => false, :client_options => {
-        site: "https://site.example.com",
-        redirect_uri: "https://you.example.com/auth/ping_one/callback",
-        authorize_url: '/xxx/as/authorization.oauth2',
-        token_url: '/xxx/as/token.oauth2',
-        user_url: '/xxx/idp/userinfo.openid',
-    }, :scopes => %w[profile email openid] }) }
+    let(:ping_one_service) {
+        OmniAuth::Strategies::PingOne.new(
+            "X",
+            "Y",
+            "Z",
+            {
+                :client_options => { site: "https://site.example.com",
+                                     redirect_uri: "https://you.example.com/auth/ping_one/callback",
+                                     authorize_url: '/xxx/as/authorization.oauth2',
+                                     token_url: '/xxx/as/token.oauth2',
+                                     user_url: '/xxx/idp/userinfo.openid',
+                },
+                :scopes => %w[profile email openid]
+            }
+        )
+    }
     subject { ping_one_service }
 
     context 'configured service with given params' do
