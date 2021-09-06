@@ -1,6 +1,6 @@
 require 'omniauth/strategies/ping-one'
 describe OmniAuth::Strategies::PingOne do
-    let(:ping_one_service) { OmniAuth::Strategies::PingOne.new("X", "Y", "Z", { :pkce => false, :client_options => {
+    let(:ping_one_service) { OmniAuth::Strategies::PingOne.new("X", "Y", "Z", { :pkce => true, :client_options => {
         site: "https://site.example.com",
         redirect_uri: "https://you.example.com/auth/ping_one/callback",
         authorize_url: '/xxx/as/authorization.oauth2',
@@ -12,7 +12,7 @@ describe OmniAuth::Strategies::PingOne do
     context 'configured service with given params' do
         it "given params" do
             expect(subject.client.secret).to eq "Z" # Default client always has a secret
-            expect(subject.auth_token_client.secret).to eq "Z" # Auth token client always has a secret in non-PKCE mode
+            expect(subject.auth_token_client.secret).to eq nil # Auth token client never has a secret in PKCE mode
             expect(subject.options.client_options.site).to eq "https://site.example.com"
             expect(subject.options.client_options.redirect_uri).to eq "https://you.example.com/auth/ping_one/callback"
             expect(subject.options.client_options.authorize_url).to eq '/xxx/as/authorization.oauth2'

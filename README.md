@@ -26,6 +26,17 @@ docker build . -t sdo_omniauth_ping_one
 docker run --rm sdo_omniauth_ping_one 
 ```
 
+### Run tests in container
+
+```bash 
+export IMAGE=omniauth-ping-one:localdev
+docker build --tag $IMAGE .
+docker run \
+    -v $PWD/spec:/usr/src/app/spec \
+    -v $PWD/lib:/usr/src/app/lib \
+    $IMAGE
+```
+
 ### OAuth scopes
 
 [PingOne supports different OAuth scopes][oauth-scopes]. 
