@@ -21,7 +21,7 @@ describe OmniAuth::Strategies::PingOne do
     context 'configured service with given params' do
         it "given params" do
             expect(subject.client.secret).to eq "Z" # Default client always has a secret
-            expect(subject.auth_token_client.secret).to eq "Z" # Auth token client always has a secret in non-PKCE mode
+            expect(subject.access_token_client.secret).to eq "Z" # Access token client always has a secret in non-PKCE mode
             expect(subject.options.client_options.site).to eq "https://site.example.com"
             expect(subject.options.client_options.redirect_uri).to eq "https://you.example.com/auth/ping_one/callback"
             expect(subject.options.client_options.authorize_url).to eq '/xxx/as/authorization.oauth2'
