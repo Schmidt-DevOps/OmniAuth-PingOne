@@ -2,7 +2,6 @@
 
 [![Build Status](https://travis-ci.org/ping-one/omniauth-pingone.svg?branch=master)](https://travis-ci.org/ping-one/omniauth-ping-one)
 
-
 [OmniAuth](https://github.com/Schmidt-DevOps/OmniAuth-PingOne) strategy for authenticating
 PingOne users.
 
@@ -11,10 +10,6 @@ Mount this with your Rails app to simplify the
 
 This is intended for apps already using OmniAuth, for apps that authenticate
 against more than one service (eg: PingOne and GitHub).
-
-## Configuration
-
-OmniAuth works as a Rack middleware. Mount this PingOne adapter with:
 
 ## Usage
 
@@ -75,6 +70,8 @@ Rails.application.config.middleware.use OmniAuth::Builder do
     } 
 end
 ```
+
+> Note that if you set `:pkce => true` this gem will not provide the OAuth2 secret in access token requests. In all cases I have seen so far it would clash with the PKCE credentials and Ping would reject the request with an error "invalid credentials", even though all credentials are correct.
 
 Then add to `config/routes.rb`:
 
@@ -149,3 +146,14 @@ The view (note that for security reasons the OAuth login cycle [*begins* with a 
 ```
 
 [omniauth-rails_csrf_protection]: https://github.com/cookpad/omniauth-rails_csrf_protection
+
+## Support
+
+I'd be happy to implement new features for you at a competitive hourly rate. Get in touch now: https://sdo.sh/DevOps/#contact
+
+## Contributing
+
+**Pull requests are welcome**. Please adhere to some very basic and simple principles:
+
+- Follow "separation of concern" on all levels: 1 issue == 1 pull request. Do not cover multiple issues in a pull request.
+- Unit tests raise the chance of your pull request getting accepted.
