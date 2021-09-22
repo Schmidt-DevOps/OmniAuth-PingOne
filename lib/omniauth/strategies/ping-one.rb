@@ -15,6 +15,12 @@ module OmniAuth
                 %w[openid profile email]
             end
 
+            # Ping rejects access token requests with client secret when the client is in gung-ho PKCE mode, so we do not set it.
+            def access_token_client
+                return client unless options.pkce
+                ::OAuth2::Client.new(options.client_id, nil, deep_symbolize(options.client_options))
+            end
+
             def authorize_params
                 super.tap do |params|
                     params[:scope] = options[:scopes].join(' ')
@@ -46,7 +52,11 @@ module OmniAuth
             # may otherwise reject the request.
             def build_access_token
                 verifier = request.params["code"]
-                client.auth_code.get_token(verifier, token_params.to_hash(:symbolize_keys => true), { :redirect_uri => callback_url }.merge(deep_symbolize(options.auth_token_params)))
+                access_token_client.auth_code.get_token(
+                    verifier,
+                    token_params.to_hash(:symbolize_keys => true),
+                    { :redirect_uri => callback_url }.merge(deep_symbolize(options.auth_token_params))
+                )
             end
         end
     end

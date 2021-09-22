@@ -26,6 +26,16 @@ docker build . -t sdo_omniauth_ping_one
 docker run --rm sdo_omniauth_ping_one 
 ```
 
+### Run tests in container
+
+```bash 
+export IMAGE=omniauth-ping-one:localdev
+docker build --tag $IMAGE .
+docker run \
+    -v $PWD/spec:/usr/src/app/spec \
+    -v $PWD/lib:/usr/src/app/lib \
+    $IMAGE
+```
 
 ### OAuth scopes
 
@@ -51,6 +61,7 @@ Under `config/initializers/omniauth.rb`:
 ```ruby
 Rails.application.config.middleware.use OmniAuth::Builder do
     provider :ping_one, ENV['OAUTH_PING_ONE_CLIENT_ID'], ENV['OAUTH_PING_ONE_CLIENT_SECRET'], {
+        :pkce => false,
         :client_options => {
             site: ENV['OAUTH_PING_ONE_SITE'],
             redirect_uri: ENV['OAUTH_PING_ONE_REDIRECT_URI'],
