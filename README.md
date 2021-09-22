@@ -149,7 +149,7 @@ The view (note that for security reasons the OAuth login cycle [*begins* with a 
 
 ## Support
 
-I'd be happy to implement new features for you at a competitive hourly rate. Get in touch now: https://sdo.sh/DevOps/#contact
+I'd be happy to implement new features for you at a competitive hourly rate. Get in touch now: https://sdo.sh/#contact
 
 ## Contributing
 
