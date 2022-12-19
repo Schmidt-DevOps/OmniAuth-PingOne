@@ -6,10 +6,10 @@
   "ou": "OrgUnit",
   "givenName": "Givenname",
   "member": [
-    "cn=Project_Leader,ou=quantityStructure,ou=shng,ou=KonzessionsManagement,ou=groups,ou=eea,o=eon,c=de",
-    "cn=departmenthead,ou=commitmentreporting,ou=shng,ou=KonzessionsManagement,ou=groups,ou=eea,o=eon,c=de",
-    "cn=kam,ou=commitmentreporting,ou=shng,ou=KonzessionsManagement,ou=groups,ou=eea,o=eon,c=de",
-    "cn=Project_Leader,ou=procedure,ou=shng,ou=KonzessionsManagement,ou=groups,ou=eea,o=eon,c=de"
+    "cn=Project_Leader,ou=quantityStructure,ou=shng,ou=KznManagement,ou=groups,ou=eea,o=eon,c=de",
+    "cn=departmenthead,ou=commitmentreporting,ou=shng,ou=KznManagement,ou=groups,ou=eea,o=eon,c=de",
+    "cn=kam,ou=commitmentreporting,ou=shng,ou=KznManagement,ou=groups,ou=eea,o=eon,c=de",
+    "cn=Project_Leader,ou=procedure,ou=shng,ou=KznManagement,ou=groups,ou=eea,o=eon,c=de"
   ],
   "cn": "X12345",
   "sn": "Schmidt",
