@@ -1,0 +1,12 @@
+{
+  "sub": "my@company.com",
+  "c": "DE",
+  "UserIDType": "idtype",
+  "ou": "OrgUnit",
+  "givenName": "Givenname",
+  "cn": "X12345",
+  "sn": "Surname",
+  "orgUnitID": "12345",
+  "email": "my@company.com",
+  "orgID": "123"
+}

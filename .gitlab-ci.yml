@@ -5,21 +5,26 @@ default:
       - runner_system_failure
       - stuck_or_timeout_failure
 
+image: docker:20.10.22
+
+variables:
+  DOCKER_TLS_CERTDIR: "/certs"
+
 before_script:
   - docker info
+
+services:
+  - docker:20.10.22-dind
 
 stages:
   - test
 
 unit_tests:
   stage: test
-  services:
-    - docker:19-dind
   script:
-    - docker info
     - docker build . --tag sdo-omniauth-ping-one
     - docker run --rm --name="sdo-omniauth-ping-one-cont" sdo-omniauth-ping-one
   tags:
     - sdo-default-runner
-  only:
-    - master
+#  only:
+#    - master
