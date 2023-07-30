@@ -1,3 +1,7 @@
+# Note: This is not working yet. Codeberg does not have ruby/setup-ruby action https://codeberg.org/actions
+#       and currently the runner is complaining about not really being a GitHub Action runner.
+#       Thus we are currently relying on actual GitHub Actions for this repo: https://github.com/Schmidt-DevOps/OmniAuth-PingOne/actions
+
 name: Ruby
 
 on: [push, pull_request]
