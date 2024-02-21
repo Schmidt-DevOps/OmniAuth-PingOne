@@ -1,6 +1,6 @@
 # OmniAuth PingOne
 
-[![Build Status](https://github.com/Schmidt-DevOps/OmniAuth-PingOne/actions/workflows/ruby.yml/badge.svg)](https://travis-ci.org/ping-one/omniauth-ping-one)
+[![Build Status](https://github.com/Schmidt-DevOps/OmniAuth-PingOne/actions/workflows/ruby.yml/badge.svg)](https://github.com/Schmidt-DevOps/OmniAuth-PingOne/actions)
 
 [OmniAuth](https://github.com/Schmidt-DevOps/OmniAuth-PingOne) strategy for authenticating
 PingOne users.
