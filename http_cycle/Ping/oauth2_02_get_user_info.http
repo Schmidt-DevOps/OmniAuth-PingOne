@@ -1,0 +1,15 @@
+### How to use:
+### 1. Do what oauth2_01 says
+### 3. Run this file.
+
+GET {{host}}/idp/userinfo.openid
+Accept: application/json
+Authorization: Bearer {{access_token}}
+
+> {%
+client.test("Expect HTTP status 200 on login form", function() {
+  var type = response.contentType.mimeType;
+  client.assert(type === "application/json", "Expected 'application/json' but received '" + type + "'");
+  client.assert(response.status === 200, "Expected HTTP status 200");
+});
+%}

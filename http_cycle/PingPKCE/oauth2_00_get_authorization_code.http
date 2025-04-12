@@ -1,0 +1,42 @@
+### How to use:
+### 0. Copy provided client ID and client secret to the env file.
+### 1. Run this HTTP request. It will fail with an 401 error because there is (proably) no SSO session yet .
+### 2. Copy the generated HTTP request from the log and run it manually in your web browser.
+### 3. When the IDP has redirected you to the callback URL (=the app won't log you in because it
+###    does not/cannot know the state parameter value. This is OK.)
+### 4. Note the code parameter. Update the env file with it. Note: valid for 10-15 minutes.
+### 5. Continue with subsequent OAuth2 requests.
+
+GET {{host}}/as/authorization.oauth2?code_challenge={{code_challenge64}}&code_challenge_method={{code_challenge_method}}&allow_signup=true&state={{state}}&scope={{scopes}}&response_type=code&approval_prompt=auto&redirect_uri={{redirect_uri}}&client_id={{client_id}}
+Connection: keep-alive
+Pragma: no-cache
+Cache-Control: no-cache
+Upgrade-Insecure-Requests: 1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.61 Safari/537.36
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9
+Sec-Fetch-Site: cross-site
+Sec-Fetch-Mode: navigate
+Sec-Fetch-User: ?1
+Sec-Fetch-Dest: document
+Accept-Language: de-DE,de;q=0.9,en-US;q=0.8,en;q=0.7
+Cookie: ADRUM=s=1590756463127&r={{host}}%2F%3F2083148630; PF=QpXDBOqVrrBOVc35keJFQv8rvmNg3tqKIyJFv03VOpG; PF_S=.em202; lb-sticky=535106101.37919.0000; cloudLogin-legacy=T1RLAQEbIC_3ySxknnDfVxsof3aiLg1ohARHCavq7w6Qc-SU_rkX0iKAACAl8ASrAaqsul5NCUu530H2zmsxY4ZJn9JuTc-mDYKoiVJi5YD3gen44wrtAw6gJxCJw7xePp3u962qtXJwSBoV3tPaKgO_moL-H8ssP-F1ButeylsQqrvDHicOWqgy_Q2yuubEaXsCxnKnCmMqqLGDGb6wQeY9GovByxEfLqs*
+
+###
+
+
+
+
+
+
+#GET {{host}}/login?client_id={{client_id}}&response_type=code&state={{state}}&return_to={{return_to}}&redirect_uri={{redirect_uri}}
+#User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:76.0) Gecko/20100101 Firefox/76.0
+#Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8
+#Accept-Language: de,en-US;q=0.7,en;q=0.3
+#Connection: keep-alive
+#Cookie: user_session={{session_id}}; __Host-user_session_same_site={{session_id}}; logged_in=yes; dotcom_user=rene-s; _device_id=f6e7181d5376e6a67b7adbed70150b33; has_recent_activity=1; tz=Europe%2FBerlin; _gh_sess=KY77YtPDta%2FDIdrMoYyetMggdRbT4zapWFFmEXnwhkez%2BU1f1IsM7yZfZCatzeiKuMJAXfomNzGWg8q46yySklGQPfHfvuFekQJa48dVKqt9L%2Bln37m7moOKjOooDRs0094lw76v8SDOc%2BCF1sRPPI4Yq5uuNeuWkynPk839B94%3D--5sGho6aRCzlWuq5b--MmhPExE9dQEu0TnVQYmoag%3D%3D
+#Upgrade-Insecure-Requests: 1
+#Pragma: no-cache
+#Cache-Control: no-cache
+
+### https://d-idp.example.com/.well-known/openid-configuration
+

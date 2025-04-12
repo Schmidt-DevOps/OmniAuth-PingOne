@@ -1,0 +1,12 @@
+GET {{host}}/users/sign_in
+Accept: text/html
+
+> {%
+client.test("Expect HTTP status 200 on login form", function() {
+  client.assert(response.status === 200, "Expected HTTP status 200");
+});
+%}
+
+### General info: https://www.jetbrains.com/help/idea/http-client-in-product-code-editor.html
+### HTTP Client Reference: https://www.jetbrains.com/help/idea/http-client-reference.html
+### Response handling examples: https://www.jetbrains.com/help/idea/http-response-handling-examples.html
